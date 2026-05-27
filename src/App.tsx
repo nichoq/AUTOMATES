@@ -1847,12 +1847,12 @@ E → 0E | 1E | ε`
               </div>
 
               {/* Image Reference inside modal */}
-              <div className="relative rounded-lg overflow-hidden bg-slate-100 border border-slate-200 p-4 flex items-center justify-center min-h-[220px]">
+              <div className="relative rounded-lg overflow-hidden bg-slate-100 border border-slate-200 p-4 flex items-center justify-center">
                 <img
-                  src={tabIdx === 0 ? "PDA1.png" : "PDA2.png"}
+                  src={tabIdx === 0 ? "/pda11.png" : "/pda22.png"}
                   alt={`PDA Reference Diagram ${tabIdx + 1}`}
                   draggable="false"
-                  className="max-h-[280px] max-w-full object-contain select-none shadow-sm rounded bg-white p-2"
+                  className="w-full object-contain select-none shadow-sm rounded bg-white p-2"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = "none";
                     const fallback = document.getElementById(`pda-modal-fallback-${tabIdx}`);
@@ -1866,8 +1866,8 @@ E → 0E | 1E | ε`
                 >
                   <HelpCircle size={26} className="text-amber-500" />
                   <div>
-                    <span className="font-bold text-slate-700 block text-[12px] mb-1">Missing Graphic File (PDA{tabIdx + 1}.png)</span>
-                    Upload or rename your PDA diagram file to <code className="font-mono bg-slate-150 p-1.5 rounded text-indigo-700 font-bold text-[10px]">PDA{tabIdx + 1}.png</code> inside the repo to visual-render the PDF/PNG scan here.
+                    <span className="font-bold text-slate-700 block text-[12px] mb-1">Missing Graphic File ({tabIdx === 0 ? "pda11.png" : "pda22.png"})</span>
+                    Upload or rename your PDA diagram file to <code className="font-mono bg-slate-150 p-1.5 rounded text-indigo-700 font-bold text-[10px]">{tabIdx === 0 ? "pda11.png" : "pda22.png"}</code> inside the repo to visual-render the PDF/PNG scan here.
                   </div>
                 </div>
               </div>
