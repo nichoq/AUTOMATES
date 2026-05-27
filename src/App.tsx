@@ -93,7 +93,7 @@ export function getPdaTracePath(tabIdx: number, input: string): PdaStep[] {
       } 
       else if (currentNode === 'n8') {
         if (char === 'b') nextNode = 'n3';
-        else if (char === 'a') nextNode = 'n9';
+        else if (char === 'a') nextNode = 'n10';
       } 
       else if (currentNode === 'n9') {
         if (char === 'a') nextNode = 'rej2';
@@ -659,14 +659,70 @@ function simulateString(input) {
           >
             <Menu size={16} />
           </button>
-          <div className="flex flex-col">
-            <div className={`text-sm font-display font-extrabold tracking-wide uppercase transition-colors ${
-              tabIdx === 1 ? "text-purple-700" : "text-indigo-700"
-            }`}>
-              AUTOMATES
-            </div>
-            <div className="text-[10px] text-slate-500 font-medium tracking-wide font-sans">
-              DFA Verifier &middot; Batch Test &middot; Visual Tracer
+          <div className="flex flex-col items-start justify-center gap-0.5 leading-none">
+            <svg 
+              viewBox="0 0 1150 280" 
+              className="h-[28px] w-auto flex-shrink-0" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ac46fc" />
+                  <stop offset="50%" stopColor="#6716bc" />
+                  <stop offset="100%" stopColor="#2e0854" />
+                </linearGradient>
+              </defs>
+              
+              {/* Circuit top terminal */}
+              <path d="M 155,126 L 75,126" stroke="url(#logo-grad)" strokeWidth="8" strokeLinecap="round" />
+              <circle cx="75" cy="126" r="9" stroke="url(#logo-grad)" strokeWidth="7" fill="#ffffff" />
+              
+              {/* Circuit middle-bottom terminal */}
+              <path d="M 165,150 L 115,150 L 98,162 L 45,162" stroke="url(#logo-grad)" strokeWidth="8" strokeLinecap="round" />
+              <circle cx="45" cy="162" r="9" stroke="url(#logo-grad)" strokeWidth="7" fill="#ffffff" />
+              
+              {/* Circuit bottom-most terminal */}
+              <path d="M 160,174 L 118,174 L 102,198 L 85,198" stroke="url(#logo-grad)" strokeWidth="8" strokeLinecap="round" />
+              <circle cx="85" cy="198" r="9" stroke="url(#logo-grad)" strokeWidth="7" fill="#ffffff" />
+              
+              {/* Upper outer crescent circle with arrow pointer */}
+              <path d="M 112,100 A 105,105 0 0,1 262,90" fill="none" stroke="url(#logo-grad)" strokeWidth="13" strokeLinecap="round" />
+              <polygon points="262,75 291,95 258,112" fill="url(#logo-grad)" />
+              
+              {/* Lower outer crescent circle starting from left bottom to bottom-right */}
+              <path d="M 112,200 A 105,105 0 0,0 265,210" fill="none" stroke="url(#logo-grad)" strokeWidth="13" strokeLinecap="round" />
+              
+              {/* Gear (Cog) representation */}
+              <circle cx="195" cy="150" r="50" fill="url(#logo-grad)" />
+              {/* Rotated gear teeth */}
+              <rect x="183" y="85" width="24" height="25" rx="5" transform="rotate(0 195 150)" fill="url(#logo-grad)" />
+              <rect x="183" y="85" width="24" height="25" rx="5" transform="rotate(45 195 150)" fill="url(#logo-grad)" />
+              <rect x="183" y="85" width="24" height="25" rx="5" transform="rotate(90 195 150)" fill="url(#logo-grad)" />
+              <rect x="183" y="85" width="24" height="25" rx="5" transform="rotate(135 195 150)" fill="url(#logo-grad)" />
+              <rect x="183" y="85" width="24" height="25" rx="5" transform="rotate(180 195 150)" fill="url(#logo-grad)" />
+              <rect x="183" y="85" width="24" height="25" rx="5" transform="rotate(225 195 150)" fill="url(#logo-grad)" />
+              <rect x="183" y="85" width="24" height="25" rx="5" transform="rotate(270 195 150)" fill="url(#logo-grad)" />
+              <rect x="183" y="85" width="24" height="25" rx="5" transform="rotate(315 195 150)" fill="url(#logo-grad)" />
+              
+              {/* Inner hole cutout so gear looks like a true ring */}
+              <circle cx="195" cy="150" r="29" fill="#ffffff" />
+              
+              {/* Text: AUTOMATE in bold, high-contrast, modern gradient design matching typeface layout */}
+              <text 
+                x="320" 
+                y="185" 
+                fill="url(#logo-grad)" 
+                fontSize="135" 
+                fontWeight="900" 
+                fontFamily="Inter, system-ui, -apple-system, sans-serif" 
+                letterSpacing="1"
+              >
+                AUTOMATE
+              </text>
+            </svg>
+            <div className="text-[9px] text-slate-500 font-bold tracking-widest font-sans uppercase pl-2 leading-none">
+              DFA Verifier &middot; Visual Tracer
             </div>
           </div>
 

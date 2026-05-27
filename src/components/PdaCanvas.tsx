@@ -293,7 +293,7 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
               {renderLink("n8", "n3", "M 335,278 L 275,225", "b", 305, 251)}
               
               {/* Transition down into n9 and n10 */}
-              {renderLink("n8", "n9", "M 350,310 L 350,340", "a", 360, 325)}
+              {renderLink("n8", "n10", "M 362,302 L 418,348", "a", 398, 318)}
               {renderLink("n9", "rej2", "M 330,360 L 254,360", "a", 280, 348)}
               {renderLink("n9", "n10", "M 370,360 L 410,360", "b", 390, 348)}
               {renderLink("n7", "rej1", "M 100,440 H 45 V 375", "b", 65, 452)}
