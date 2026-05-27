@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/automata-logo 1.png" alt="Automates Logo" width="320" />
+  <img src="public/automata-logo.png" alt="Automates Logo" width="320" />
 
   <h1>AUTOMATES</h1>
   <p><strong>DFA Verifier & Visual Tracer</strong></p>
