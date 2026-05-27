@@ -931,7 +931,7 @@ function simulateString(input) {
             <div className="flex items-center gap-1.5 self-center">
               <span className="text-[9px] text-slate-400 font-sans font-semibold">Shortest Acceptance Size:</span>
               <span className="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 font-bold rounded">
-                {tabIdx === 0 ? '7 ("aabaaaa")' : '5 ("00101")'}
+                {tabIdx === 0 ? '7 ("aabaaaa")' : '6 ("001101")'}
               </span>
             </div>
           </section>
@@ -1949,7 +1949,7 @@ E → 0E | 1E | ε`
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5 flex flex-col gap-1.5">
                 <p className="font-bold text-slate-700 text-[11px] uppercase tracking-wider">Quick Tips</p>
                 <ul className="flex flex-col gap-1 list-disc pl-4 text-slate-500">
-                  <li>The <strong>shortest accepted string</strong> for DFA 1 is <code className="font-mono bg-white border border-slate-200 px-1 rounded">aabaaaa</code> (7 chars) and for DFA 2 is <code className="font-mono bg-white border border-slate-200 px-1 rounded">00101</code> (5 chars).</li>
+                  <li>The <strong>shortest accepted string</strong> for DFA 1 is <code className="font-mono bg-white border border-slate-200 px-1 rounded">aabaaaa</code> (7 chars) and for DFA 2 is <code className="font-mono bg-white border border-slate-200 px-1 rounded">001101</code> (6 chars).</li>
                   <li>Inputs are automatically filtered — you cannot type invalid alphabet characters.</li>
                   <li>Switching tabs resets the trace and clears the selected input.</li>
                   <li>You can collapse the sidebar with the ☰ icon to give the canvas more room.</li>
