@@ -39,7 +39,7 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
     { id: "n9", type: "read", label: "READ", x: 350, y: 360 },
     { id: "n7", type: "read", label: "READ", x: 120, y: 440 },
     { id: "n10", type: "read", label: "READ", x: 430, y: 360 },
-    
+
     // Reject nodes of left half
     { id: "rej1", type: "reject", label: "REJECT", x: 45, y: 360 },
     { id: "rej2", type: "reject", label: "REJECT", x: 215, y: 360 },
@@ -156,7 +156,7 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
             <text
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize={11}
+              fontSize={13}
               fontWeight="900"
               fontFamily="'JetBrains Mono', monospace"
               fill={isActive ? activeColor : "#475569"}
@@ -210,11 +210,10 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
       <div className="absolute top-3 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-slate-200 shadow-sm text-[10px] text-slate-500 font-mono z-10 flex flex-col gap-0.5 pointer-events-none select-none max-w-[250px]">
         <div>
           Active Node:{" "}
-          <span className={`font-extrabold px-1.5 py-0.5 rounded border uppercase ${
-            tabIdx === 0
-              ? "text-indigo-600 bg-indigo-50 border-indigo-200"
-              : "text-purple-600 bg-purple-50 border-purple-200"
-          }`}>
+          <span className={`font-extrabold px-1.5 py-0.5 rounded border uppercase ${tabIdx === 0
+            ? "text-indigo-600 bg-indigo-50 border-indigo-200"
+            : "text-purple-600 bg-purple-50 border-purple-200"
+            }`}>
             {getActiveNodeDisplay()}
           </span>
         </div>
@@ -226,7 +225,7 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
       <div className="flex-1 overflow-auto p-4 flex items-center justify-center min-h-0">
         <svg
           viewBox={tabIdx === 0 ? "0 0 920 520" : "0 0 980 480"}
-          className="w-full max-h-[460px] md:max-h-[490px] select-none h-auto block"
+          className="w-full max-h-[540px] md:max-h-[580px] select-none h-auto block"
         >
           {/* Defined marker arrows for standard/highlight states */}
           <defs>
@@ -276,28 +275,28 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
               {renderLink("n2", "n5", "M 183,222 L 205,274", "b", 200, 245)}
               {renderLink("n3", "n6", "M 280,210 L 330,210", "a", 305, 198)}
               {renderLink("n3", "n5", "M 252,223 L 226,275", "b", 232, 245)}
-              
+
               {/* Route from center read-junction n5 to bottom-right read-junction n9 */}
               {renderLink("n5", "n9", "M 230,300 L 330,360", "a", 280, 325)}
-              
+
               {/* Straight and left links around n4 */}
               {renderLink("n4", "rej1", "M 100,290 H 45 V 345", "a", 65, 278)}
               {renderLink("n4", "n7", "M 120,310 L 120,420", "b", 110, 360)}
               {renderLink("n5", "rej2", "M 215,310 L 215,345", "b", 225, 325)}
-              
+
               {/* Curve and right links around n6 */}
               {renderLink("n6", "rej3", "M 370,210 L 411,210", "a", 395, 198)}
               {renderLink("n6", "n8", "M 350,230 L 350,270", "b", 360, 245)}
-              
+
               {/* Re-entry loop from n8 up to n3 */}
               {renderLink("n8", "n3", "M 335,278 L 275,225", "b", 305, 251)}
-              
+
               {/* Transition down into n9 and n10 */}
               {renderLink("n8", "n10", "M 362,302 L 418,348", "a", 398, 318)}
               {renderLink("n9", "rej2", "M 330,360 L 254,360", "a", 280, 348)}
               {renderLink("n9", "n10", "M 370,360 L 410,360", "b", 390, 348)}
               {renderLink("n7", "rej1", "M 100,440 H 45 V 375", "b", 65, 452)}
-              
+
               {/* Bottom-left long line feedback to junction n10 */}
               {renderLink("n7", "n10", "M 140,440 H 430 V 380", "a", 170, 428)}
 
@@ -307,7 +306,7 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
               {/* Links: Right Half (Second Section) */}
               {renderLink("n11", "n12", "M 545,345 L 605,305", "a", 570, 310)}
               {renderLink("n11", "n13", "M 550,360 L 600,360", "b", 575, 348)}
-              
+
               {/* Trailing aa-bb ping-pong track links */}
               {renderLink("n12", "n14", "M 620,270 L 620,220", "a", 610, 245)}
               {renderLink("n12", "n13", "M 614,310 L 614,340", "b", 604, 325)}
@@ -316,7 +315,7 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
 
               {/* Right outputs to accept states */}
               {renderLink("n14", "acc1", "M 620,180 L 620,115", "Δ", 632, 148)}
-              
+
               {/* Loop paths */}
               {renderLink("n14", "n14", "M 610,190 C 570,175 570,225 610,210", "a", 565, 200, undefined)}
               {renderLink("n14", "n13", "M 640,200 H 770 V 410 H 620 V 380", "b", 755, 230)}
@@ -390,6 +389,8 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
 
             if (n.type === "read") {
               // Custom styled high fidelity Diamond shape
+              const size = 25;
+              const pointsStr = `0,-${size} ${size},0 0,${size} -${size},0`;
               return (
                 <g
                   key={n.id}
@@ -398,14 +399,14 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
                 >
                   {/* Subtle hover/active shadows */}
                   <polygon
-                    points="0,-20 20,0 0,20 -20,0"
+                    points={pointsStr}
                     fill="#151b2e"
                     opacity={isActive ? 0.35 : 0}
                     transform="scale(1.2) translate(0, 3)"
                   />
                   {/* Real Diamond */}
                   <polygon
-                    points="0,-20 20,0 0,20 -20,0"
+                    points={pointsStr}
                     fill={colors.fill}
                     stroke={colors.stroke}
                     strokeWidth={colors.strokeWidth}
@@ -415,7 +416,7 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
                   <text
                     textAnchor="middle"
                     dominantBaseline="central"
-                    fontSize={8.5}
+                    fontSize={10}
                     fontWeight="900"
                     fontFamily="sans-serif"
                     fill={colors.textColor}
@@ -428,7 +429,7 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
                     <circle
                       cx={0}
                       cy={0}
-                      r={24}
+                      r={size + 4}
                       fill={tabIdx === 0 ? "#818cf8" : "#c084fc"}
                       strokeWidth={1.5}
                       className="animate-ping"
@@ -441,8 +442,10 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
 
             // Render Capsules (START, REJECT, ACCEPT)
             const isStart = n.id.startsWith("start");
-            const width = isStart ? 65 : 78;
-            const height = 30;
+            const baseWidth = isStart ? 65 : 78;
+            const baseHeight = 30;
+            const width = baseWidth * 1.15;
+            const height = baseHeight * 1.15;
 
             return (
               <g
@@ -477,7 +480,7 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
                   y={height / 2}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fontSize={10}
+                  fontSize={11.5}
                   fontWeight="900"
                   fontFamily="sans-serif"
                   fill={colors.textColor}
@@ -511,16 +514,14 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
         <span className="text-[8px] text-slate-400 uppercase tracking-widest font-black">Legend Map</span>
         <div className="flex flex-col gap-1.5 text-[9px] text-slate-600 font-sans">
           <div className="flex items-center gap-2">
-            <span className={`w-2.5 h-1.5 border rounded-xs inline-block ${
-              tabIdx === 0 ? "border-slate-450 bg-slate-150" : "border-purple-300 bg-purple-50"
-            }`} />
+            <span className={`w-2.5 h-1.5 border rounded-xs inline-block ${tabIdx === 0 ? "border-slate-450 bg-slate-150" : "border-purple-300 bg-purple-50"
+              }`} />
             <span className="font-bold text-slate-700">START (entry phase)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 flex items-center justify-center">
-              <span className={`w-1.5 h-1.5 border rotate-45 block transform ${
-                tabIdx === 0 ? "border-slate-450 bg-white" : "border-purple-300 bg-white"
-              }`} />
+              <span className={`w-1.5 h-1.5 border rotate-45 block transform ${tabIdx === 0 ? "border-slate-450 bg-white" : "border-purple-300 bg-white"
+                }`} />
             </div>
             <span className="font-bold text-slate-700">READ (character node)</span>
           </div>
