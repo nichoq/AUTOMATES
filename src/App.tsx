@@ -263,6 +263,7 @@ export default function App() {
   const [showPdaPopup, setShowPdaPopup] = useState<boolean>(false);
   const [showStateMeaningsPopup, setShowStateMeaningsPopup] = useState<boolean>(false);
   const [showTransitionsPopup, setShowTransitionsPopup] = useState<boolean>(false);
+  const [showHelpPopup, setShowHelpPopup] = useState<boolean>(false);
   const [copiedCfg, setCopiedCfg] = useState<boolean>(false);
 
   const handleCopyCfg = (rules: string) => {
@@ -774,6 +775,14 @@ function simulateString(input) {
             <Database size={11} className="text-teal-600" />
             View PDA Reference
           </button>
+          <button
+            onClick={() => setShowHelpPopup(true)}
+            className="text-[10px] bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200 font-bold px-3 py-1.5 rounded flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
+            title="How to use this app"
+          >
+            <HelpCircle size={12} />
+            Help
+          </button>
         </div>
       </header>
 
@@ -922,7 +931,7 @@ function simulateString(input) {
             <div className="flex items-center gap-1.5 self-center">
               <span className="text-[9px] text-slate-400 font-sans font-semibold">Shortest Acceptance Size:</span>
               <span className="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 font-bold rounded">
-                {tabIdx === 0 ? '7 ("aabaaaa")' : '5 ("00101")'}
+                {tabIdx === 0 ? '7 ("aabaaaa")' : '6 ("001101")'}
               </span>
             </div>
           </section>
@@ -1813,6 +1822,154 @@ E → 0E | 1E | ε`
         </div>
       )}
 
+      {/* Help / How-to-use Modal */}
+      {showHelpPopup && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-2xl w-full flex flex-col max-h-[88vh] overflow-hidden font-sans">
+            <div className="p-4 px-5 border-b border-slate-200 flex items-center justify-between bg-slate-50 flex-shrink-0">
+              <div className="flex items-center gap-2">
+                <HelpCircle size={18} className="text-slate-600" />
+                <h3 className="font-sans font-extrabold text-slate-800 text-[14px] uppercase tracking-wide">
+                  How to Use AUTOMATES
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowHelpPopup(false)}
+                className="p-1 rounded bg-slate-200 hover:bg-slate-300 text-slate-600 transition cursor-pointer"
+              >
+                <X size={14} />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5 text-[11.5px] text-slate-600 leading-relaxed font-sans">
+
+              {/* Overview */}
+              <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-3.5 text-indigo-900">
+                <p className="font-bold text-[12px] mb-1">What is this?</p>
+                <p>
+                  AUTOMATES is a visual simulator for two formal language machines — a <strong>Deterministic Finite Automaton (DFA)</strong> and a <strong>Pushdown Automaton (PDA)</strong> — each built from a specific regular expression. You can feed input strings, watch the machine process them step by step, and verify whether they are accepted or rejected.
+                </p>
+              </div>
+
+              {/* Step-by-step */}
+              <div className="flex flex-col gap-3">
+
+                {/* Step 1 */}
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-[10px]">1</div>
+                  <div>
+                    <p className="font-bold text-slate-800 text-[12px]">Choose a DFA Tab</p>
+                    <p className="mt-0.5 text-slate-500">
+                      Use the <span className="font-bold text-indigo-600">DFA 1 (REGEX 1)</span> or <span className="font-bold text-purple-600">DFA 2 (REGEX 2)</span> tab at the top to switch between the two automata. Each tab has its own alphabet, regex pattern, states, and input history.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-[10px]">2</div>
+                  <div>
+                    <p className="font-bold text-slate-800 text-[12px]">Enter Input Strings</p>
+                    <p className="mt-0.5 text-slate-500">
+                      Open the left sidebar (☰ menu icon) and type up to <strong>5 test strings</strong> in the batch input fields. Strings are auto-sanitized to the active alphabet (<code className="bg-slate-100 px-1 rounded font-mono">a, b</code> for DFA 1 — <code className="bg-slate-100 px-1 rounded font-mono">0, 1</code> for DFA 2). Each field instantly shows a green <span className="text-emerald-600 font-bold">✓ ACCEPT</span> or red <span className="text-rose-600 font-bold">✗ REJECT</span> badge.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-[10px]">3</div>
+                  <div>
+                    <p className="font-bold text-slate-800 text-[12px]">Trace a String</p>
+                    <p className="mt-0.5 text-slate-500">
+                      Click <span className="font-bold text-indigo-600">⟶ Trace</span> next to any input to load it into the simulator. The <strong>Trace Tape</strong> panel above the canvas will show the state path as a breadcrumb trail. Use the playback controls to animate it:
+                    </p>
+                    <ul className="mt-1.5 flex flex-col gap-1 pl-3 list-none text-slate-500">
+                      <li><span className="font-bold text-slate-700">▶ / ⏸</span> — start or pause autoplay</li>
+                      <li><span className="font-bold text-slate-700">⏮ / ⏭</span> — step backward or forward one character at a time</li>
+                      <li><span className="font-bold text-slate-700">↺</span> — reset the trace back to the start</li>
+                      <li><span className="font-bold text-slate-700">Speed</span> — choose Slow, Normal, Fast, or Blazing</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Step 4 */}
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-[10px]">4</div>
+                  <div>
+                    <p className="font-bold text-slate-800 text-[12px]">Switch Between DFA and PDA Views</p>
+                    <p className="mt-0.5 text-slate-500">
+                      In the top-left of the canvas, toggle between <strong>DFA Automaton</strong> (state graph) and <strong>PDA Flowchart</strong> (pushdown automaton). Both views animate the active node as the tape plays. The PDA uses a stack-based decision tree that mirrors the DFA's language.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 5 */}
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-[10px]">5</div>
+                  <div>
+                    <p className="font-bold text-slate-800 text-[12px]">Explore Reference Panels</p>
+                    <p className="mt-0.5 text-slate-500">Use the buttons in the top-right header to open additional reference materials:</p>
+                    <div className="mt-1.5 flex flex-col gap-1.5">
+                      <div className="flex items-start gap-2">
+                        <span className="bg-indigo-50 border border-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded text-[9.5px] whitespace-nowrap">Show States &amp; Code</span>
+                        <span className="text-slate-500">View the full DFA transition table as a JavaScript object you can copy and use in your own code.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="bg-teal-50 border border-teal-100 text-teal-700 font-bold px-1.5 py-0.5 rounded text-[9.5px] whitespace-nowrap">View PDA Reference</span>
+                        <span className="text-slate-500">See the hand-drawn NPDA diagram for the currently active regex.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="bg-amber-50 border border-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded text-[9.5px] whitespace-nowrap">View CFG</span>
+                        <span className="text-slate-500">Open the Context-Free Grammar production rules that generate the language.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="bg-amber-50 border border-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded text-[9.5px] whitespace-nowrap">Trace on CFG</span>
+                        <span className="text-slate-500">Shows the leftmost derivation of your traced string through the CFG step by step (only visible when a string is loaded).</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 6 */}
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-[10px]">6</div>
+                  <div>
+                    <p className="font-bold text-slate-800 text-[12px]">Sidebar Extras</p>
+                    <p className="mt-0.5 text-slate-500">At the bottom of the sidebar:</p>
+                    <ul className="mt-1 flex flex-col gap-1 pl-3 list-disc text-slate-500">
+                      <li><span className="font-bold text-slate-700">State Meanings Dict</span> — human-readable descriptions for every state, with the active state highlighted during tracing.</li>
+                      <li><span className="font-bold text-slate-700">Transition Table Matrix</span> — the full δ-function for all states, also live-highlighted during tracing.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick tips */}
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5 flex flex-col gap-1.5">
+                <p className="font-bold text-slate-700 text-[11px] uppercase tracking-wider">Quick Tips</p>
+                <ul className="flex flex-col gap-1 list-disc pl-4 text-slate-500">
+                  <li>The <strong>shortest accepted string</strong> for DFA 1 is <code className="font-mono bg-white border border-slate-200 px-1 rounded">aabaaaa</code> (7 chars) and for DFA 2 is <code className="font-mono bg-white border border-slate-200 px-1 rounded">001101</code> (6 chars).</li>
+                  <li>Inputs are automatically filtered — you cannot type invalid alphabet characters.</li>
+                  <li>Switching tabs resets the trace and clears the selected input.</li>
+                  <li>You can collapse the sidebar with the ☰ icon to give the canvas more room.</li>
+                </ul>
+              </div>
+
+            </div>
+
+            <div className="p-4 px-5 border-t border-slate-200 flex-shrink-0 flex justify-end bg-slate-50">
+              <button
+                onClick={() => setShowHelpPopup(false)}
+                className="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded transition shadow-xs cursor-pointer"
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* PDA Modal Popup */}
       {showPdaPopup && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -1847,12 +2004,12 @@ E → 0E | 1E | ε`
               </div>
 
               {/* Image Reference inside modal */}
-              <div className="relative rounded-lg overflow-hidden bg-slate-100 border border-slate-200 p-4 flex items-center justify-center min-h-[220px]">
+              <div className="relative rounded-lg overflow-hidden bg-slate-100 border border-slate-200 p-4 flex items-center justify-center">
                 <img
-                  src={tabIdx === 0 ? "PDA1.png" : "PDA2.png"}
+                  src={tabIdx === 0 ? "/pda11.png" : "/pda22.png"}
                   alt={`PDA Reference Diagram ${tabIdx + 1}`}
                   draggable="false"
-                  className="max-h-[280px] max-w-full object-contain select-none shadow-sm rounded bg-white p-2"
+                  className="w-full object-contain select-none shadow-sm rounded bg-white p-2"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = "none";
                     const fallback = document.getElementById(`pda-modal-fallback-${tabIdx}`);
@@ -1866,8 +2023,8 @@ E → 0E | 1E | ε`
                 >
                   <HelpCircle size={26} className="text-amber-500" />
                   <div>
-                    <span className="font-bold text-slate-700 block text-[12px] mb-1">Missing Graphic File (PDA{tabIdx + 1}.png)</span>
-                    Upload or rename your PDA diagram file to <code className="font-mono bg-slate-150 p-1.5 rounded text-indigo-700 font-bold text-[10px]">PDA{tabIdx + 1}.png</code> inside the repo to visual-render the PDF/PNG scan here.
+                    <span className="font-bold text-slate-700 block text-[12px] mb-1">Missing Graphic File ({tabIdx === 0 ? "pda11.png" : "pda22.png"})</span>
+                    Upload or rename your PDA diagram file to <code className="font-mono bg-slate-150 p-1.5 rounded text-indigo-700 font-bold text-[10px]">{tabIdx === 0 ? "pda11.png" : "pda22.png"}</code> inside the repo to visual-render the PDF/PNG scan here.
                   </div>
                 </div>
               </div>

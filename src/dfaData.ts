@@ -92,46 +92,46 @@ export const DFA_DATA: DFAConfig[] = [
     H: 580,
     R: 24
   },
-  // DFA 2 (Regex 2) matches index 1 in standard HTML definition
+  // DFA 2 (Regex 2) — states ordered: -, q1, q2, q3, q4, q5, q6, q7, +
   {
     n: 9,
     START: 0,
-    ACC: new Set([1]),
+    ACC: new Set([8]),
     T: [
-      { "0": 7, "1": 4 }, // 0
-      { "0": 1, "1": 1 }, // 1
-      { "0": 3, "1": 3 }, // 2
-      { "0": 3, "1": 5 }, // 3
-      { "0": 7, "1": 2 }, // 4
-      { "0": 6, "1": 8 }, // 5
-      { "0": 3, "1": 1 }, // 6
-      { "0": 2, "1": 4 }, // 7
-      { "0": 6, "1": 1 }  // 8
+      { "0": 1, "1": 2 }, // 0: -
+      { "0": 3, "1": 2 }, // 1: q1
+      { "0": 1, "1": 3 }, // 2: q2
+      { "0": 4, "1": 4 }, // 3: q3
+      { "0": 4, "1": 5 }, // 4: q4
+      { "0": 6, "1": 7 }, // 5: q5
+      { "0": 4, "1": 8 }, // 6: q6
+      { "0": 6, "1": 8 }, // 7: q7
+      { "0": 8, "1": 8 }  // 8: +
     ],
     alpha: ["0", "1"],
     dead: new Set([]),
-    labels: ["-", "+", "q3", "q4", "q2", "q5", "q6", "q1", "q7"],
+    labels: ["-", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "+"],
     DESC: [
       "Start — no matching pair seen",
-      "★ ACCEPT — valid string parsed",
+      "Continuing traversal (last read 0)",
+      "Continuing traversal (last read 1)",
       "Pair 00 complete (last state saw 0)",
       "Post-pair state, continuing sequence (last read 0)",
-      "Continuing traversal (last read 1)",
       "Post-pair state, continuing sequence (last read 1)",
       "Post-pair state, matched '10'",
-      "Continuing traversal (last read 0)",
-      "Post-pair state, matched '11'"
+      "Post-pair state, matched '11'",
+      "★ ACCEPT — valid string parsed"
     ],
     pos: [
       [80, 200],   // 0: -
-      [880, 300],  // 1: +
-      [400, 200],  // 2: q3
-      [560, 200],  // 3: q4
-      [240, 300],  // 4: q2
+      [240, 100],  // 1: q1
+      [240, 300],  // 2: q2
+      [400, 200],  // 3: q3
+      [560, 200],  // 4: q4
       [720, 100],  // 5: q5
       [720, 300],  // 6: q6
-      [240, 100],  // 7: q1
-      [880, 100]   // 8: q7
+      [880, 100],  // 7: q7
+      [880, 300]   // 8: +
     ],
     W: 900,
     H: 400,
