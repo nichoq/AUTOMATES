@@ -62,8 +62,8 @@ const StateBubble = ({ label, style, accepting, dead, size = 64 }: BubbleProps) 
   const bg = accepting
     ? "rgba(220,252,231,0.55)"
     : dead
-    ? "rgba(254,226,226,0.55)"
-    : "rgba(237,233,254,0.55)";
+      ? "rgba(254,226,226,0.55)"
+      : "rgba(237,233,254,0.55)";
   const textColor = accepting ? "#15803d" : dead ? "#b91c1c" : "#6d28d9";
 
   return (
@@ -145,17 +145,33 @@ const Arrow = ({ style }: { style?: React.CSSProperties }) => (
 );
 
 // ─── Mini DFA preview (static visual) ────────────────────────────────────────
+// Container is h-24 (96px). Bubbles are centered at y=48.
+// q₂ center: x=336, y=48. Circle radius=26 => top of circle at y=22.
+// Self-loop SVG: left=306, top=-10, width=62, height=36
+//   In SVG coords: left-contact=(20,32) right-contact=(40,32) peak=(30,4)
 const MiniDfa = () => (
-  <div className="relative w-full h-full">
+  <div className="relative w-full h-24 overflow-visible">
     <StateBubble label="q₀" size={52} style={{ left: 10, top: "50%", transform: "translateY(-50%)" }} />
     <Arrow style={{ left: 72, top: "calc(50% - 1px)" }} />
     <StateBubble label="q₁" size={52} style={{ left: 160, top: "50%", transform: "translateY(-50%)" }} />
     <Arrow style={{ left: 222, top: "calc(50% - 1px)" }} />
     <StateBubble label="q₂" accepting size={52} style={{ left: 310, top: "50%", transform: "translateY(-50%)" }} />
-    {/* self-loop arc */}
-    <svg className="absolute" style={{ left: 288, top: 2, width: 96, height: 48 }} viewBox="0 0 96 48">
-      <path d="M 16,44 C 16,4 80,4 80,44" fill="none" stroke="#a78bfa" strokeWidth="2" strokeDasharray="5 3" />
-      <polygon points="78,40 84,46 72,46" fill="#a78bfa" />
+    {/* self-loop arc — arcs clearly above q₂, connects at top of circle */}
+    <svg
+      className="absolute"
+      style={{ left: 306, top: -10, width: 62, height: 38, overflow: "visible" }}
+      viewBox="0 0 62 38"
+    >
+      {/* Path from top-left of circle up and over to top-right */}
+      <path
+        d="M 11,36 C 11,6 51,6 51,36"
+        fill="none"
+        stroke="#a78bfa"
+        strokeWidth="2"
+        strokeDasharray="5 3"
+      />
+      {/* Arrowhead pointing downward at right contact (51,36) */}
+      <polygon points="47,28 55,28 51,36" fill="#a78bfa" />
     </svg>
   </div>
 );
@@ -201,11 +217,11 @@ const regexData = [
   {
     id: 1,
     label: "REGEX 1",
-    pattern: "(a|b)(a|b)(aa|ab|ba|bb)(a|b)*(aa|bb)",
+    pattern: "(bab)* (b + a) (bab + aba) (a + b)* (aa + bb)* (b + a + bb) (a + b)* (aa + bb)",
     alphabet: "{a, b}",
     description:
       "Strings over {a, b} where the first two symbols can be any combination of a and b, followed by a two-character middle block, then zero or more characters, ending in aa or bb.",
-    accepted: ["abaaaa", "baabbb", "aabbaa", "bbabbb"],
+    accepted: ["babaababaa", "ababbaa", "aabaaaa", "bbabbaa"],
     rejected: ["ab", "aab", "bab", "aaab"],
     color: "indigo",
     gradient: "from-indigo-500 to-violet-500",
@@ -217,11 +233,11 @@ const regexData = [
   {
     id: 2,
     label: "REGEX 2",
-    pattern: "(0|1)(0|1)(00|11)(0|1)*(01|10|11)(0|1)*",
+    pattern: "(1+0)*(11+00)(00+11)*(1+0+11)(1+0+11)*(101+111)(101+111)*(1+0*+11)(1+0*+11)*",
     alphabet: "{0, 1}",
     description:
       "Binary strings where the first two bits can be 0 or 1, followed by a two-bit equal pair (00 or 11), then arbitrary bits, a required two-bit sub-pattern, and any trailing bits.",
-    accepted: ["010011", "110010", "001100", "11001110"],
+    accepted: ["1101111", "000101", "0011111", "101011010111"],
     rejected: ["01", "001", "101", "0011"],
     color: "purple",
     gradient: "from-purple-500 to-pink-500",
@@ -286,6 +302,7 @@ interface LandingPageProps {
 export default function LandingPage({ onLaunch }: LandingPageProps) {
   const [scrolled, setScrolled] = useState(false);
   const [activeRegex, setActiveRegex] = useState(0);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -293,8 +310,22 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      if (glowRef.current) {
+        glowRef.current.style.left = `${e.clientX}px`;
+        glowRef.current.style.top = `${e.clientY}px`;
+      }
+    };
+    window.addEventListener("mousemove", onMouseMove);
+    return () => window.removeEventListener("mousemove", onMouseMove);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#f5f3ff] text-slate-800 font-sans overflow-x-hidden">
+      {/* ── Cursor glow ──────────────────────────────────────────────────── */}
+      <div ref={glowRef} className="cursor-glow" />
+
       {/* ── Background grid ──────────────────────────────────────────────── */}
       <div
         className="fixed inset-0 pointer-events-none z-0"
@@ -307,11 +338,10 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
 
       {/* ── Navbar ───────────────────────────────────────────────────────── */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/80 backdrop-blur-xl shadow-sm border-b border-violet-100"
-            : "bg-transparent"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+          ? "bg-white/80 backdrop-blur-xl shadow-sm border-b border-violet-100"
+          : "bg-transparent"
+          }`}
       >
         <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <AutomateLogo className="h-[28px] w-auto" />
@@ -377,13 +407,13 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
           {/* Main title */}
           <h1 className="leading-none">
             <span
-              className="block text-[clamp(3.5rem,12vw,8rem)] font-black text-slate-900 font-display tracking-tight"
+              className="block text-[clamp(3.5rem,12vw,8rem)] font-black text-slate-900 font-display tracking-tight transition-transform duration-300 ease-out hover:scale-105 origin-center cursor-default"
               style={{ letterSpacing: "-0.03em" }}
             >
               Automate
             </span>
             <span
-              className="block text-[clamp(1.6rem,5vw,3.5rem)] font-bold font-display mt-1"
+              className="block text-[clamp(1.6rem,5vw,3.5rem)] font-bold font-display mt-1 pb-1 transition-transform duration-300 ease-out hover:scale-105 origin-center cursor-default"
               style={{
                 background: "linear-gradient(135deg, #7c3aed, #4f46e5, #a855f7)",
                 WebkitBackgroundClip: "text",
@@ -433,7 +463,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-300" />
               </div>
             </div>
-            <div className="relative h-16 flex items-center">
+            <div className="relative h-24 flex items-center" style={{ overflow: "visible" }}>
               <MiniDfa />
             </div>
             <div className="mt-3 flex items-center gap-2">
@@ -557,13 +587,12 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
                   key={i}
                   id={`regex-tab-${i + 1}`}
                   onClick={() => setActiveRegex(i)}
-                  className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer ${
-                    activeRegex === i
-                      ? r.color === "indigo"
-                        ? "bg-white text-indigo-700 shadow-sm border border-slate-200"
-                        : "bg-white text-purple-700 shadow-sm border border-slate-200"
-                      : "text-slate-500 hover:text-slate-700"
-                  }`}
+                  className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer ${activeRegex === i
+                    ? r.color === "indigo"
+                      ? "bg-white text-indigo-700 shadow-sm border border-slate-200"
+                      : "bg-white text-purple-700 shadow-sm border border-slate-200"
+                    : "text-slate-500 hover:text-slate-700"
+                    }`}
                 >
                   {r.label}
                 </button>
@@ -645,11 +674,10 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
                   <button
                     id={`test-regex-${i + 1}-btn`}
                     onClick={onLaunch}
-                    className={`flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-xl cursor-pointer transition-all ${
-                      r.color === "indigo"
-                        ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200"
-                        : "bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-200"
-                    }`}
+                    className={`flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-xl cursor-pointer transition-all ${r.color === "indigo"
+                      ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200"
+                      : "bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-200"
+                      }`}
                   >
                     Test {r.label} <ArrowRight size={13} />
                   </button>
@@ -747,7 +775,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
           ].map((step, i) => (
             <div key={i} className="relative bg-white rounded-2xl border border-slate-100 shadow-sm p-7 flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <span className="text-4xl font-black text-slate-100 font-display">{step.step}</span>
+                <span className="text-4xl font-black text-slate-900 font-display">{step.step}</span>
                 <span className="text-2xl">{step.icon}</span>
               </div>
               <div>
@@ -835,6 +863,27 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
           0%, 100% { transform: translateY(0px) rotate(0deg); }
           25% { transform: translateY(-10px) rotate(2deg); }
           75% { transform: translateY(8px) rotate(-3deg); }
+        }
+        @keyframes glowPulse {
+          0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+          50% { opacity: 0.75; transform: translate(-50%, -50%) scale(1.08); }
+        }
+        .cursor-glow {
+          position: fixed;
+          pointer-events: none;
+          z-index: 1;
+          width: 520px;
+          height: 520px;
+          border-radius: 50%;
+          background: radial-gradient(
+            ellipse at center,
+            rgba(139, 92, 246, 0.28) 0%,
+            rgba(109, 40, 217, 0.14) 35%,
+            transparent 70%
+          );
+          transform: translate(-50%, -50%);
+          animation: glowPulse 3s ease-in-out infinite;
+          filter: blur(2px);
         }
       `}</style>
     </div>

@@ -232,7 +232,7 @@ export function getPdaTracePath(tabIdx: number, input: string): PdaStep[] {
   return steps;
 }
 
-export default function App() {
+export default function App({ onGoHome }: { onGoHome: () => void }) {
   const [tabIdx, setTabIdx] = useState<number>(0);
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
   
@@ -660,10 +660,14 @@ function simulateString(input) {
           >
             <Menu size={16} />
           </button>
-          <div className="flex flex-col items-start justify-center gap-0.5 leading-none">
+          <button
+            onClick={onGoHome}
+            className="flex flex-col items-start justify-center gap-0.5 leading-none group cursor-pointer bg-transparent border-0 p-1 rounded-lg hover:bg-violet-50 transition-colors duration-150"
+            title="Back to Home"
+          >
             <svg 
               viewBox="0 0 1150 280" 
-              className="h-[28px] w-auto flex-shrink-0" 
+              className="h-[28px] w-auto flex-shrink-0 group-hover:opacity-80 transition-opacity" 
               fill="none" 
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -722,10 +726,10 @@ function simulateString(input) {
                 AUTOMATE
               </text>
             </svg>
-            <div className="text-[9px] text-slate-500 font-bold tracking-widest font-sans uppercase pl-2 leading-none">
+            <div className="text-[9px] text-slate-500 font-bold tracking-widest font-sans uppercase pl-2 leading-none group-hover:text-violet-500 transition-colors">
               DFA Verifier &middot; Visual Tracer
             </div>
-          </div>
+          </button>
 
           <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200/60 ml-6">
             <button

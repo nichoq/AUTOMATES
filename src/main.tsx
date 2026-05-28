@@ -8,7 +8,7 @@ function Root() {
   const [launched, setLaunched] = useState(false);
 
   if (launched) {
-    return <App />;
+    return <App onGoHome={() => setLaunched(false)} />;
   }
   return <LandingPage onLaunch={() => setLaunched(true)} />;
 }
