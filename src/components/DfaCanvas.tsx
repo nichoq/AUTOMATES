@@ -408,23 +408,23 @@ export const DfaCanvas: React.FC<DfaCanvasProps> = ({
         drawSelfLoop(16, "a,b", 0, 40, 14);  // Trap Mid
         drawSelfLoop(17, "a,b", -40, 0, 14); // Trap Left
       } else {
-        // ════ TAB 1 (DFA 2): Original DFA 2 drawing with Premium Canvas Style ════
-        drawEdge(0, 7, "0", 0, [-12, -12]);  // - to q1
-        drawEdge(0, 4, "1", 0, [-12, 12]);   // - to q2
-        drawEdge(7, 4, "1", 0, [-18, 0], 14); // q1 to q2 (vertical, shifted left)
-        drawEdge(4, 7, "0", 0, [18, 0], 14);  // q2 to q1 (vertical, shifted right)
-        drawEdge(7, 2, "0", 0, [12, -12]);   // q1 to q3
-        drawEdge(4, 2, "1", 0, [12, 12]);    // q2 to q3
-        drawEdge(2, 3, "0,1", 0, [0, -14]);  // q3 to q4
-        drawSelfLoop(3, "0", 0, -42, 14);    // q4 self-loop ABOVE
-        drawEdge(3, 5, "1", 0, [-12, -12]);  // q4 to q5
-        drawEdge(5, 6, "0", 0, [-12, 0]);    // q5 to q6 (vertical straight arrow going down)
-        drawEdge(5, 8, "1", 0, [0, -14]);    // q5 to q7
-        drawEdge(6, 3, "0", 0, [14, 14]);    // q6 to q4
-        drawEdge(8, 6, "0", 0, [14, -14]);   // q7 to q6
-        drawEdge(8, 1, "1", 0, [14, 0]);     // q7 to + (vertical straight arrow going down)
-        drawEdge(6, 1, "1", 0, [0, 14]);     // q6 to +
-        drawSelfLoop(1, "0,1", 0, 42, 14);   // + self-loop BELOW
+        // ════ TAB 1 (DFA 2): states 0=-, 1=q1, 2=q2, 3=q3, 4=q4, 5=q5, 6=q6, 7=q7, 8=+ ════
+        drawEdge(0, 1, "0", 0, [-12, -12]);  // - to q1
+        drawEdge(0, 2, "1", 0, [-12, 12]);   // - to q2
+        drawEdge(1, 2, "1", 0, [-18, 0], 14); // q1 to q2 (vertical, shifted left)
+        drawEdge(2, 1, "0", 0, [18, 0], 14);  // q2 to q1 (vertical, shifted right)
+        drawEdge(1, 3, "0", 0, [12, -12]);   // q1 to q3
+        drawEdge(2, 3, "1", 0, [12, 12]);    // q2 to q3
+        drawEdge(3, 4, "0,1", 0, [0, -14]);  // q3 to q4
+        drawSelfLoop(4, "0", 0, -42, 14);    // q4 self-loop ABOVE
+        drawEdge(4, 5, "1", 0, [-12, -12]);  // q4 to q5
+        drawEdge(5, 6, "0", 0, [-12, 0]);    // q5 to q6
+        drawEdge(5, 7, "1", 0, [0, -14]);    // q5 to q7
+        drawEdge(6, 4, "0", 0, [14, 14]);    // q6 to q4
+        drawEdge(7, 6, "0", 0, [14, -14]);   // q7 to q6
+        drawEdge(7, 8, "1", 0, [14, 0]);     // q7 to +
+        drawEdge(6, 8, "1", 0, [0, 14]);     // q6 to +
+        drawSelfLoop(8, "0,1", 0, 42, 14);   // + self-loop BELOW
       }
 
       // Draw Start State Arrow (represented with dotted or dash parameters)
