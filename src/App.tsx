@@ -211,9 +211,6 @@ export function getPdaTracePath(tabIdx: number, input: string): PdaStep[] {
         if (char === '0') nextNode = 'n2_7';
         else if (char === '1') nextNode = 'acc_2';
       } 
-      else if (currentNode === 'acc_2') {
-        if (char === '0' || char === '1') nextNode = 'acc_2';
-      }
 
       if (!nextNode) {
         break; 

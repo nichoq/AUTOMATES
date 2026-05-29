@@ -376,8 +376,6 @@ export const PdaCanvas: React.FC<PdaCanvasProps> = ({
               {/* n2_8 -> acc_2 on 1 (horizontal right) */}
               {renderLink("n2_8", "acc_2", "M 810,330 L 871,330", "1", 840, 318)}
 
-              {/* acc_2 -> acc_2 loop (on 0,1) */}
-              {renderLink("acc_2", "acc_2", "M 900,315 C 875,260 945,260 920,315", "0,1", 910, 260)}
             </>
           )}
 
